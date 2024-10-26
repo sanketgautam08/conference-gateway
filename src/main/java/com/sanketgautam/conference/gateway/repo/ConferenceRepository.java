@@ -129,8 +129,7 @@ public class ConferenceRepository {
             String randomstring = "";
             while(!insertedConfirmation){
                 randomstring = generateRandomString();
-                insertIntoConfirmation(randomstring, id, user.getId());
-                insertedConfirmation = true;
+                 insertedConfirmation = insertIntoConfirmation(randomstring, id, user.getId());
             }
             return randomstring;
         }catch(Exception e){
@@ -138,17 +137,23 @@ public class ConferenceRepository {
             return null;
         }
     }
-    private void insertIntoConfirmation(String confirmationNumber, int conferenceId, int userId) {
+    private boolean insertIntoConfirmation(String confirmationNumber, int conferenceId, int userId) {
         String sql = """
                 insert into confirmation(confirmation_number, conference_id, user_id)
                 values(?,?,?)
                 """;
-        jdbcClient.sql(sql).params(confirmationNumber,conferenceId, userId).update();
-        LOGGER.info("Confirmation added to db.");
+        try{
+            jdbcClient.sql(sql).params(confirmationNumber,conferenceId, userId).update();
+            LOGGER.info("Confirmation added to db.");
+            return true;
+        }catch(Exception e){
+            LOGGER.error("Error while inserting into confirmation\n {}", e.getMessage());
+            return false;
+        }
     }
 
     private String generateRandomString(){
-        String alphaNumericStr = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789abcdefghijklmnopqrstuvxyz";
+        String alphaNumericStr = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789abcdefghijklmnopqrstuvxyz!@#$%^&*+=-";
         Random random = new Random();
         StringBuilder s = new StringBuilder(8);
 
