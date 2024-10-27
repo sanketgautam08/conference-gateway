@@ -71,7 +71,7 @@ public class ConferenceRepository {
                 on c.room_id = r.room_id
                 full join conference_users cu
                 on cu.conference_id = c.conference_id
-                where c.date_time = ?
+                where CAST(c.start_date_time as DATE)  = ?
                 group by c.conference_id, r.max_capacity
                 having count(cu.conference_id) <r.max_capacity
                 """;
