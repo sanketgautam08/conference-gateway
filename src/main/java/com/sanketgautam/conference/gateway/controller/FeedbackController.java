@@ -11,7 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/feedback")
+@RequestMapping("/conference/feedback")
 public class FeedbackController {
     private final Logger LOGGER = LoggerFactory.getLogger(FeedbackController.class);
     private final FeedbackRepository feedbackRepo;
